@@ -1,5 +1,5 @@
 from math import ceil
-from collections import Sequence, Iterator
+from collections import Sequence
 
 class xrange(Sequence):
     """Pure-Python implementation of an ``xrange`` (aka ``range``
@@ -122,32 +122,9 @@ class xrange(Sequence):
     def __iter__(self):
         """Return an iterator which enumerates the elements of the
         sequence this xrange represents."""
-        return xrangeiterator(self)
-
-class xrangeiterator(Iterator):
-    """An iterator for an :class:`xrange`.
-    """
-
-    def __init__(self, xrangeobj):
-        self._xrange = xrangeobj
-
-        # Intialize the "last outputted value" to the value
-        # just before the first value; this simplifies next()
-        self._last = self._xrange._start - self._xrange._step
-        self._count = 0
-
-    def __iter__(self):
-        """An iterator is already an iterator, so return ``self``.
-        """
-        return self
-
-    def next(self):
-        """Return the next element in the sequence represented
-        by the xrange we are iterating, or raise StopIteration
-        if we have passed the end of the sequence."""
-        self._last += self._xrange._step
-        self._count += 1
-        if self._count > self._xrange._len:
-            raise StopIteration()
-        return self._last
-
+        count = 0
+        num = self._start
+        while count < self._len:
+            yield num
+            num += self._step
+            count += 1
